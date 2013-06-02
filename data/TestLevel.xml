@@ -27,8 +27,22 @@
 			</item>
 		</HSDiploma>
 		<CollegeDiploma>
-			<PickupForComplete>3</PickupForComplete>
-			<requires>HSDiploma</requires>
+			<PickupForComplete>2</PickupForComplete>
+			<item>
+				<PickUpType>CollegeDiploma</PickUpType>
+				<x>800</x>
+				<y>10</y>
+				<requires stat="money">80</requires>
+				<requires stat="goal">HSDiploma</requires>
+			</item>
+			<item>
+				<PickUpType>CollegeDiploma</PickUpType>
+				<x>900</x>
+				<y>10</y>
+				<requires stat="money">80</requires>
+				<requires stat="goal">HSDiploma</requires>
+			</item>
+			
 		</CollegeDiploma>
 	</goals>
 	<pickups>
@@ -48,13 +62,11 @@
 	</pickups>
 	<obstacles>
 		<item>
-			<ObstacleType>College</ObstacleType>
+			<ObstacleType>Impossible</ObstacleType>
 			<x>600</x>
 			<y>100</y>
 			<w>200</w>
 			<h>200</h>
-			<requires stat="money">100</requires>
-			<requires stat="goal">HSDiploma</requires>
 			<chance>1</chance>
 		</item>
 		
@@ -64,7 +76,6 @@
 			<y>200</y>
 			<w>200</w>
 			<h>300</h>
-			<requires stat="impossible">100</requires>
 			<chance>1</chance>
 		</item>
 	</obstacles>

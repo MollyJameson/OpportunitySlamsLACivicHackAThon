@@ -39,6 +39,7 @@
 		// powerups you destroy on contact. Obstacles block movement on collision.
 		private var m_ArrPowerUps:Vector.<PowerUp>;
 		private var m_ArrObstacles:Vector.<BlockingObstacle>;
+		private var m_HSPowerUps:int;
 		
 		private var m_HUD:Object;
 		
@@ -86,6 +87,7 @@
 			m_DownPressed = false;
 			m_LeftPressed = false;
 			m_RightPressed = false;
+			m_HSPowerUps = 0;
 			
 			m_ArrPowerUps = new Vector.<PowerUp>();
 			m_ArrObstacles = new Vector.<BlockingObstacle>;
@@ -159,6 +161,7 @@
 				var new_money:Number = m_Player.ModifyResource(Player.RES_MONEY,-m_CurrLevelData.m_MoneyDrip);
 				m_HUD[Player.RES_MONEY].SetCurrValue(new_money);
 				m_MoneyDripTimer = 1;
+				UpdateRestrictions();
 			}
 			
 			this.inst_location.text = "world: " + int(m_World.x) + " , " +  int(m_World.y) + " avatar " + int(m_Player.x) + " , " + int(m_Player.y);
@@ -201,30 +204,42 @@
 			for( var i:int = len - 1; i >= 0; --i )
 			{
 				var power_up:PowerUp = m_ArrPowerUps[i];
-				
-				if( power_up.hitTestObject(m_Player) )
+				if( power_up.visible )
 				{
-					// remove and give player the resource.
-					if( power_up.GetPowerUpType() == PowerUp.MONEY )
+					if( power_up.hitTestObject(m_Player) )
 					{
-						var new_money_sub:Number = m_Player.ModifyResource(Player.RES_MONEY,20);
-						m_HUD[Player.RES_MONEY].SetCurrValue(new_money_sub);
+						// remove and give player the resource.
+						if( power_up.GetPowerUpType() == PowerUp.MONEY )
+						{
+							var new_money_sub:Number = m_Player.ModifyResource(Player.RES_MONEY,20);
+							m_HUD[Player.RES_MONEY].SetCurrValue(new_money_sub);
+							
+							var float_text:FloatyText = new FloatyText();
+							float_text.x = global_pt.x; 
+							float_text.y = global_pt.y;
+							this.addChild(float_text);
+							float_text.Init("+Money",0x00FF00,m_HUD[Player.RES_MONEY].x,m_HUD[Player.RES_MONEY].y);
+							UpdateRestrictions();
+							
+						}
+						else if( power_up.GetPowerUpType() == PowerUp.EMOTIONAL_SUPPORT )
+						{
+							m_Player.ModifyResource(Player.RES_EMO,5);
+							m_HUD[Player.RES_EMO].SetCurrValue(-5);
+						}
+						else if( power_up.GetPowerUpType() == PowerUp.HSDIPLOMA )
+						{
+							m_HSPowerUps++;
+							if( m_HSPowerUps >= this.m_CurrLevelData.m_HSGoalComplete )
+							{
+								// Show or hide any obstacles that get in the way.
+								UpdateRestrictions();
+							}
+						}
 						
-						var float_text:FloatyText = new FloatyText();
-						float_text.x = global_pt.x; 
-						float_text.y = global_pt.y;
-						this.addChild(float_text);
-						float_text.Init("+Money",0x00FF00,m_HUD[Player.RES_MONEY].x,m_HUD[Player.RES_MONEY].y);
-						
+						m_World.removeChild(power_up);
+						m_ArrPowerUps.splice(i,1);
 					}
-					else if( power_up.GetPowerUpType() == PowerUp.EMOTIONAL_SUPPORT )
-					{
-						m_Player.ModifyResource(Player.RES_EMO,5);
-						m_HUD[Player.RES_EMO].SetCurrValue(-5);
-					}
-					
-					m_World.removeChild(power_up);
-					m_ArrPowerUps.splice(i,1);
 				}
 			}
 			var obstacle_collision:Boolean = false;
@@ -234,7 +249,7 @@
 			{
 				// trivial hit test.
 				var test_obj:BlockingObstacle = m_ArrObstacles[j];
-				
+				// HACK: kind of awkward because you can hit the side but no time to do real velocity check collision resolution
 				if( test_obj.hitTestObject(m_Player) )
 				{
 					// ruh roh, we need to step back to our last good position.
@@ -269,21 +284,6 @@
 		
 		private function InitTestLevel():void
 		{
-			/*var money_test:PowerUp = new PowerUp(PowerUp.MONEY);
-			m_ArrPowerUps.push(money_test);
-			money_test.x = 200; money_test.y = 200;
-			m_World.addChild(money_test);
-			
-			var emo_test:PowerUp = new PowerUp(PowerUp.EMOTIONAL_SUPPORT);
-			m_ArrPowerUps.push(emo_test);
-			emo_test.x = 500; emo_test.y = 300;
-			m_World.addChild(emo_test);
-			
-			
-			var college_test:BlockingObstacle = new BlockingObstacle( 200,100 );
-			m_ArrObstacles.push( college_test );
-			college_test.x = 600; college_test.y = 100;
-			m_World.addChild(college_test);*/
 			
 			var level_data:LevelData = Main.Inst.GetLevelData("test");
 			m_ArrPowerUps = level_data.m_ArrPowerUps;
@@ -305,6 +305,40 @@
 			m_CurrLevelData = level_data;
 			
 			m_MoneyDripTimer = 1;
+		}
+		
+		public function UpdateRestrictions():void
+		{
+			var completed_hs_goal:Boolean = false;
+			if( m_HSPowerUps >= this.m_CurrLevelData.m_HSGoalComplete )
+			{
+				completed_hs_goal = true;
+			}
+			var curr_money:int = m_Player.GetResource(Player.RES_MONEY);
+			var len:int = m_ArrPowerUps.length;
+			for( var i:int = 0; i < len; ++i )
+			{
+				// set as not visible if requirements aren't met
+				var power_up:PowerUp = m_ArrPowerUps[i];
+				var edu_allow:Boolean = true;
+				if( power_up.GetHSDiplomaRequirement() )
+				{
+					if( !completed_hs_goal )
+					{
+						edu_allow = false;
+					}
+				}
+				trace("Curr Money: " + curr_money);
+				trace("Money req: " + power_up.GetMoneyRequirement() );
+				if( curr_money >= power_up.GetMoneyRequirement() && edu_allow )
+				{
+					power_up.visible = true;
+				}
+				else
+				{
+					power_up.visible = false;
+				}
+			}
 		}
 		
 		public override function onKeyDownEvent(ev:KeyboardEvent):void

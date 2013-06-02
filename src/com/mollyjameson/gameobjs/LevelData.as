@@ -7,6 +7,8 @@
 		public var m_ArrObstacles:Vector.<BlockingObstacle>;
 		
 		public var m_MoneyDrip:Number;
+		public var m_HSGoalComplete:Number;
+		public var m_CollegeGoalComplete:Number;
 		
 		public var m_FurthestX:int;
 		
@@ -16,6 +18,8 @@
 			m_ArrObstacles = new Vector.<BlockingObstacle>();
 			m_MoneyDrip = 0;
 			m_FurthestX = 0;
+			m_HSGoalComplete = 0;
+			m_CollegeGoalComplete = 0;
 		}
 		
 		private function UpdateLevelInfo(xpos:int):void
@@ -23,37 +27,59 @@
 			if( xpos > m_FurthestX )
 			{
 				m_FurthestX = xpos;
+				trace("Furthest X is " + m_FurthestX);
 			}
 		}
 		
 		public function AddPickUp(pickup:XML):void
 		{
-			trace("Pickup type: " +pickup.PickUpType );
+			trace("what the hell: " + pickup);
+			trace("Pickup type: " + pickup.PickUpType );
+			var pickup_obj:PowerUp = null;
 			if(pickup.PickUpType == "money")
 			{
-				var money_test:PowerUp = new PowerUp(PowerUp.MONEY);
-				m_ArrPowerUps.push(money_test);
-				money_test.x = pickup.x; money_test.y = pickup.y;
-				UpdateLevelInfo(money_test.x);
+				pickup_obj = new PowerUp(PowerUp.MONEY);
+			}
+			else if(pickup.PickUpType == "HSDiploma")
+			{
+				pickup_obj = new PowerUp(PowerUp.HSDIPLOMA);
+			}
+			else if(pickup.PickUpType == "CollegeDiploma")
+			{
+				pickup_obj = new PowerUp(PowerUp.COLLEGE_DIPLOMA);
+			}
+			if( pickup_obj )
+			{
+				var requires_list:XMLList = pickup.requires;
+				for each (var requirement:XML in requires_list) 
+				{
+					trace("requirement " + requirement);
+					if( requirement.@stat == "money" )
+					{
+						trace("money stat" + requirement.requires);
+						pickup_obj.SetMoneyRequirement(int(requirement));
+					}
+					if( requirement.@stat == "goal" )
+					{
+						pickup_obj.SetHSDiplomaRequirement(true);
+					}
+				}
+				m_ArrPowerUps.push(pickup_obj);
+				pickup_obj.x = pickup.x; pickup_obj.y = pickup.y;
+				UpdateLevelInfo(pickup_obj.x);
 			}
 		}
 		
 		public function AddObstacle(obstacle:XML):void
 		{
-			trace("Pickup type: " +obstacle.ObstacleType );
-			if(obstacle.ObstacleType == "College")
-			{
-				var college_test:BlockingObstacle = new BlockingObstacle( obstacle.w,obstacle.h );
-				m_ArrObstacles.push( college_test );
-				college_test.x = obstacle.x; college_test.y = obstacle.y;
-				UpdateLevelInfo(college_test.x + obstacle.w);
-			}
-			else if(obstacle.ObstacleType == "Impossible")
+			trace("ObstacleType type: " +obstacle.ObstacleType );
+			if(obstacle.ObstacleType == "Impossible")
 			{
 				var impossible_test:BlockingObstacle = new BlockingObstacle( obstacle.w,obstacle.h );
 				m_ArrObstacles.push( impossible_test );
 				impossible_test.x = obstacle.x; impossible_test.y = obstacle.y;
-				UpdateLevelInfo(impossible_test.x + obstacle.w)
+				// String num confusion in ECMA script :(
+				UpdateLevelInfo(int(impossible_test.x) + int(obstacle.w))
 			}
 		}
 		

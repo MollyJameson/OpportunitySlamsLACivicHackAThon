@@ -173,6 +173,7 @@
 		}
 		private function loadedCompleteHandler(e:Event):void
 		{
+			// TODO: IF I Had more time there would be way way more error checking here.
 			e.target.removeEventListener(Event.COMPLETE, loadedCompleteHandler);
 			var xmldata:XML = XML(e.target.data);
 			
@@ -185,7 +186,7 @@
 				{
 					for each (var pickup_items:XML in item_list) 
 					{
-						//trace("pickup_items: " + pickup_items);
+						trace("pickup_items: " + pickup_items);
 						test_level.AddPickUp(pickup_items);
 					}
 				}
@@ -200,6 +201,34 @@
 					{
 						//trace("pickup_items: " + pickup_items);
 						test_level.AddObstacle(obstacles_items);
+					}
+				}
+			}
+			
+			// we don't have that many goals, so just hardcode it.
+			var goals:XMLList = xmldata.goals;
+			if( goals )
+			{
+				if( goals.HSDiploma )
+				{
+					test_level.m_HSGoalComplete = goals.HSDiploma.PickupForComplete;
+					//trace("Completion Needed" + completion_needed)
+					var item_list4:XMLList = goals.HSDiploma.item;
+					for each (var pickup_goals:XML in item_list4) 
+					{
+						//trace("pickup_goals: " + pickup_goals);
+						test_level.AddPickUp(pickup_goals);
+					}
+				}
+				if( goals.CollegeDiploma )
+				{
+					test_level.m_CollegeGoalComplete = goals.CollegeDiploma.PickupForComplete;
+					//trace("Completion Needed" + completion_needed)
+					var item_list5:XMLList = goals.CollegeDiploma.item;
+					for each (var pickup_goals2:XML in item_list5) 
+					{
+						//trace("pickup_goals: " + pickup_goals);
+						test_level.AddPickUp(pickup_goals2);
 					}
 				}
 			}
