@@ -33,7 +33,6 @@
 		
 		public function AddPickUp(pickup:XML):void
 		{
-			trace("what the hell: " + pickup);
 			trace("Pickup type: " + pickup.PickUpType );
 			var pickup_obj:PowerUp = null;
 			
@@ -46,11 +45,9 @@
 				"CollegeDiploma": PowerUp.COLLEGE_DIPLOMA,
 				"JobCashier": PowerUp.JOB_CASHIER,
 				"JobComputer": PowerUp.JOB_COMPUTER,
-				"JobDoctor": PowerUp.JOB_DOCTOR
+				"JobDoctor": PowerUp.JOB_DOCTOR,
+				"emo": PowerUp.EMOTIONAL_SUPPORT
 			};
-			
-			trace(frame_mapping["money"] + " should exist");
-			trace(frame_mapping[pickup.PickUpType] + " label of " + pickup.PickUpType);
 			
 			if( frame_mapping[pickup.PickUpType] != null )
 			{

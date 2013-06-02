@@ -215,7 +215,7 @@
 			for( var i:int = len - 1; i >= 0; --i )
 			{
 				var power_up:PowerUp = m_ArrPowerUps[i];
-				if( power_up.visible )
+				if( power_up.visible && power_up.parent )
 				{
 					if( power_up.hitTestObject(m_Player) )
 					{
@@ -259,6 +259,7 @@
 						
 						m_World.removeChild(power_up);
 						m_ArrPowerUps.splice(i,1);
+						break;
 					}
 				}
 			}

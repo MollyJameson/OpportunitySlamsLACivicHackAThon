@@ -134,7 +134,7 @@
 		public function onMouseClicked(ev:MouseEvent):void
 		{
 			Main.Inst.is_fun_version = true;
-			Main.Inst.m_RequestedLevelName = "Test";
+			Main.Inst.m_RequestedLevelName = "test";
 			requestState("game");
 		}
 		
@@ -146,7 +146,7 @@
 		public function OnRealisticVersionClicked(ev:MouseEvent):void
 		{
 			Main.Inst.is_fun_version = false;
-			Main.Inst.m_RequestedLevelName = "Test";
+			Main.Inst.m_RequestedLevelName = "test";
 			requestState("game");
 		}
 	}
