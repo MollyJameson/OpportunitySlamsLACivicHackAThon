@@ -33,6 +33,9 @@
 			// B
 			m_MaxResources[RES_EMO] = 100;
 			m_Resources[RES_EMO] = m_MaxResources[RES_EMO];
+			
+			x = 20;
+			y = Main.H/2;
 		}
 		
 		public function GetResource(res_name:String):Number

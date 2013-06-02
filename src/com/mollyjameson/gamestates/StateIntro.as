@@ -14,6 +14,7 @@
 	public class StateIntro extends BaseGameState 
 	{
 		private var m_PlayBtn:Button;
+		private var m_PlayBtn2:Button;
 		private var m_OptionsBtn:Button;
 
 		// http://www.adobe.com/devnet/flash/quickstart/button_component_as3.html
@@ -24,10 +25,11 @@
 		
 		override public function Init():void
 		{
-			// TODO: 4 btn configurations and have these removed on purchase
 			m_PlayBtn = addBtn( 113, 385, "title_btn_play", onMouseClicked );
-			m_OptionsBtn = addBtn( 333, 385, "title_btn_options", onOptionsClicked );
+			m_PlayBtn2 = addBtn( 333, 385, "title_btn_play", OnRealisticVersionClicked );
+			m_OptionsBtn = addBtn( 568, 385, "title_btn_options", onOptionsClicked );
 			
+			m_OptionsBtn.enabled = false;
 		}
 		
 		override public function Enter():void 
@@ -36,6 +38,7 @@
 			
 			// reset labels in case we've changed languages
 			m_PlayBtn.label = "Play Game";
+			m_PlayBtn2.label = "Play Real Version";
 			m_OptionsBtn.label = "More Info";
 
 		}
@@ -53,6 +56,7 @@
 		// TODO: add more logging here if possible
 		public function onMouseClicked(ev:MouseEvent):void
 		{
+			Main.Inst.is_fun_version = true;
 			requestState("game");
 		}
 		
@@ -60,6 +64,11 @@
 		{
 			//Main.Inst.showIntermediateAd();
 			requestState("options");
+		}
+		public function OnRealisticVersionClicked(ev:MouseEvent):void
+		{
+			Main.Inst.is_fun_version = false;
+			requestState("game");
 		}
 	}
 

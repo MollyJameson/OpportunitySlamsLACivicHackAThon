@@ -4,6 +4,7 @@
 	import fl.controls.Button;
 	import flash.text.TextFormat;
 	import flash.events.MouseEvent;
+	import flash.events.KeyboardEvent;
 	
 	/**
 	 * ...
@@ -59,6 +60,14 @@
 				btn.addEventListener(MouseEvent.CLICK, fnc,false,0,true);
 			}
 			return btn;
+		}
+		
+		public function onKeyDownEvent(ev:KeyboardEvent):void
+		{
+		}
+		public function onKeyUpEvent(ev:KeyboardEvent):void
+		{
+			
 		}
 		
 	}

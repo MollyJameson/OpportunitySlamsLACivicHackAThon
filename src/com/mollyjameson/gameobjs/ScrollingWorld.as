@@ -16,8 +16,6 @@
 		{
 			// TODO: time base
 			x -= m_WorldSpeed;
-			
-			this.inst_location.text = "curr loc: " + x + " , " + y;
 		}
 	}
 }

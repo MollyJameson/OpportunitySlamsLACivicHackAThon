@@ -13,9 +13,13 @@
 	import flash.media.Sound;
 	import flash.media.SoundMixer;
 	import flash.events.Event;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
 	
 	import flash.text.TextField;
 	import flash.text.TextFieldAutoSize;
+	import com.mollyjameson.gameobjs.LevelData;
+	import flash.events.KeyboardEvent;
 	
 	public class Main extends Sprite 
 	{
@@ -27,6 +31,7 @@
 		
 		private var m_CurrState:BaseGameState;
 		public static var gameReady:Boolean = false;
+		public var is_fun_version:Boolean = false;
 		
 		private var m_GameStates:Object =
 		{
@@ -36,6 +41,8 @@
 		}
 		private var m_GameStateLayer:Sprite;
 		
+		private var m_Levels:Object = {}
+		
 		public function Main() 
 		{
 			if (stage) init();
@@ -44,6 +51,9 @@
 		public function init(e:Event = null):void 
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, init);
+			
+			stage.addEventListener(KeyboardEvent.KEY_DOWN,onKeyDownEvent,false,0,true);
+			stage.addEventListener(KeyboardEvent.KEY_UP,onKeyUpEvent,false,0,true);
 
 			//SWFProfiler.init(this.stage,this ); SWFProfiler.start();
 			trace("Yes we've hit the entry point");
@@ -74,6 +84,8 @@
 			mute_btn.label = "";
 			this.addChild(mute_btn);
 			mute_btn.addEventListener(Event.CHANGE, changeHandler);*/
+			
+			loadXMLFile();
 			
 			Main.gameReady = true;
 			
@@ -126,10 +138,64 @@
 		public function AttachGameState(gamestate:BaseGameState):void
 		{
 			m_GameStateLayer.addChild(gamestate);
+			m_GameStateLayer.stage.focus = this;
 		}
 		public function RemoveGameState(gamestate:BaseGameState):void
 		{
 			m_GameStateLayer.removeChild(gamestate);
+		}
+		public function onKeyDownEvent(ev:KeyboardEvent):void
+		{
+			//trace("key event " + ev);
+			
+			if( m_CurrState )
+			{
+				m_CurrState.onKeyDownEvent(ev);
+			}
+		}
+		public function onKeyUpEvent(ev:KeyboardEvent):void
+		{
+			if( m_CurrState )
+			{
+				m_CurrState.onKeyUpEvent(ev);
+			}
+		}
+		
+		public function GetLevelData(str:String):LevelData
+		{
+			return m_Levels[str];
+		}
+		
+		private function loadXMLFile():void
+		{
+			var loader= new URLLoader(new URLRequest("data/TestLevel.xml"));
+			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+		}
+		private function loadedCompleteHandler(e:Event):void
+		{
+			e.target.removeEventListener(Event.COMPLETE, loadedCompleteHandler);
+			var xmldata:XML = XML(e.target.data);
+			
+			var test_level:LevelData = new LevelData();
+			var pickups:XMLList = xmldata.pickups;
+			
+			if( pickups )
+			{
+				var item_list:XMLList = pickups.item;
+				if( item_list )
+				{
+					for each (var pickup_items:XML in item_list) 
+					{
+						//trace("pickup_items: " + pickup_items);
+						test_level.AddPickUp(pickup_items);
+					}
+				}
+			}
+			// Get pickup data
+			// Get Obstacle data
+			// Get goal data ( very specificly named )
+			
+			m_Levels["test"] = test_level;
 		}
 		
 	}

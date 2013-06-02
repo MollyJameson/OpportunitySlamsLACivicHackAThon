@@ -22,7 +22,7 @@
 			m_CurrValue = curr_val;
 			this.graphics.clear();
 			this.graphics.beginFill(0);
-			this.graphics.drawRect(0,0,W+3,H);
+			this.graphics.drawRect(0,0,W+3,H+3);
 			this.graphics.endFill();
 			
 			this.graphics.beginFill(m_Color);
