@@ -42,19 +42,29 @@
 			<x>1000</x>
 			<y>300</y>
 			<amount>50</amount>
-			<requires>HSDiploma</requires>
+			<requires stat="goal">HSDiploma</requires>
 			<chance>0.5</chance>
 		</item>
 	</pickups>
 	<obstacles>
 		<item>
 			<ObstacleType>College</ObstacleType>
-			<x>200</x>
-			<y>200</y>
+			<x>600</x>
+			<y>100</y>
 			<w>200</w>
 			<h>200</h>
 			<requires stat="money">100</requires>
 			<requires stat="goal">HSDiploma</requires>
+			<chance>1</chance>
+		</item>
+		
+		<item>
+			<ObstacleType>Impossible</ObstacleType>
+			<x>1000</x>
+			<y>200</y>
+			<w>200</w>
+			<h>300</h>
+			<requires stat="impossible">100</requires>
 			<chance>1</chance>
 		</item>
 	</obstacles>

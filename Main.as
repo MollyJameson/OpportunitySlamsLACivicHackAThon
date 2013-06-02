@@ -178,7 +178,6 @@
 			
 			var test_level:LevelData = new LevelData();
 			var pickups:XMLList = xmldata.pickups;
-			
 			if( pickups )
 			{
 				var item_list:XMLList = pickups.item;
@@ -188,6 +187,19 @@
 					{
 						//trace("pickup_items: " + pickup_items);
 						test_level.AddPickUp(pickup_items);
+					}
+				}
+			}
+			var obstacles:XMLList = xmldata.obstacles;
+			if( obstacles )
+			{
+				var item_list2:XMLList = obstacles.item;
+				if( item_list2 )
+				{
+					for each (var obstacles_items:XML in item_list2) 
+					{
+						//trace("pickup_items: " + pickup_items);
+						test_level.AddObstacle(obstacles_items);
 					}
 				}
 			}

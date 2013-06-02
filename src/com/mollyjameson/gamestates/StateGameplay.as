@@ -65,6 +65,9 @@
 			this.addChild(m_HUD[Player.RES_HEALTH]);
 			this.addChild(m_HUD[Player.RES_EMO]);
 			this.addChild(m_HUD[Player.RES_MONEY]);
+			
+			this.addChild(m_World);
+			
 		}
 		override public function Enter():void 
 		{
@@ -73,9 +76,10 @@
 			m_LastTime = getTimer();
 			
 			
-			this.addChild(m_World);
 			
 			m_World.addChild( m_Player );
+			m_World.Reset();
+			m_Player.Reset();
 			m_Player.x = 40;
 			
 			m_UpPressed = false;
@@ -113,13 +117,19 @@
 			var len:int = m_ArrPowerUps.length;
 			for( var i:int = 0; i < len; ++i )
 			{
-				m_World.removeChild(m_ArrPowerUps[i]);
+				if( m_ArrPowerUps[i].parent )
+				{
+					m_World.removeChild(m_ArrPowerUps[i]);
+				}
 			}
 			trace("remove obstacles");
 			len = m_ArrObstacles.length;
 			for( var j:int = 0; j < len; ++j )
 			{
-				m_World.removeChild(m_ArrObstacles[j]);
+				if( m_ArrObstacles[j].parent )
+				{
+					m_World.removeChild(m_ArrObstacles[j]);
+				}
 			}
 			
 			m_ArrPowerUps  = new Vector.<PowerUp>();
@@ -241,13 +251,19 @@
 			if( obstacle_collision && end_collision )
 			{
 				NextState = "outro";
+				trace("You lost due to collision");
 			}
 			if( m_Player.GetResource(Player.RES_MONEY) < 0 )
 			{
 				NextState = "outro";
+				trace("You lost due to being out of money");
 			}
 			
-			// TODO:
+			if( m_Player.x > m_CurrLevelData.m_FurthestX )
+			{
+				NextState = "outro";
+				trace("You win for making it until the end, horray");
+			}
 			
 		}
 		
@@ -273,15 +289,17 @@
 			m_ArrPowerUps = level_data.m_ArrPowerUps;
 			m_ArrObstacles = level_data.m_ArrObstacles;
 			
-			var len:int = m_ArrPowerUps.length;
+			var len:int = level_data.m_ArrPowerUps.length;
 			for( var i:int = 0; i < len; ++i )
 			{
+				m_ArrPowerUps.push(level_data.m_ArrPowerUps[i]);
 				m_World.addChild(m_ArrPowerUps[i]);
 			}
 			trace("add obstacles");
-			len = m_ArrObstacles.length;
+			len = level_data.m_ArrObstacles.length;
 			for( var j:int = 0; j < len; ++j )
 			{
+				m_ArrObstacles.push(level_data.m_ArrObstacles[j]);
 				m_World.addChild(m_ArrObstacles[j]);
 			}
 			m_CurrLevelData = level_data;
