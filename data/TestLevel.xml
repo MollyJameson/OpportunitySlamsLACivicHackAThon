@@ -1,4 +1,5 @@
 <level level_name="test">
+	<money_cap>70</money_cap>
 	<drips>
 		<money>5</money>
 	</drips>
@@ -53,11 +54,9 @@
 		</item>
 		<item>
 			<PickUpType>emo</PickUpType>
-			<x>1000</x>
+			<x>100</x>
 			<y>300</y>
 			<amount>50</amount>
-			<requires stat="goal">HSDiploma</requires>
-			<chance>0.5</chance>
 		</item>
 		<item>
 			<PickUpType>JobCashier</PickUpType>

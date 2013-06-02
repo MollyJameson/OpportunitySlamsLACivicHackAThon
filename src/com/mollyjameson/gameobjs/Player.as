@@ -12,6 +12,8 @@
 		private var m_Resources:Object;
 		private var m_MaxResources:Object;
 		
+		public var m_MoneyCap:int;
+		
 		public function Player():void
 		{
 			Reset();
@@ -36,6 +38,8 @@
 			
 			x = 20;
 			y = Main.H/2;
+			
+			m_MoneyCap = 100;
 		}
 		
 		public function GetResource(res_name:String):Number
@@ -49,7 +53,14 @@
 		
 		public function ModifyResource(res_name:String, mod_amount:Number):Number
 		{
-			m_Resources[res_name] += mod_amount
+			m_Resources[res_name] += mod_amount;
+			
+			// money has a cap that changes per level
+			if( res_name == RES_MONEY )
+			{
+				m_Resources[res_name] = m_Resources[res_name] > m_MoneyCap ? m_MoneyCap : m_Resources[res_name];
+			}
+			
 			return m_Resources[res_name];
 		}
 	}

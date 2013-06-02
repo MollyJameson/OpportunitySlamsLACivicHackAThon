@@ -9,6 +9,7 @@
 		public var m_MoneyDrip:Number;
 		public var m_HSGoalComplete:Number;
 		public var m_CollegeGoalComplete:Number;
+		public var m_MoneyCap:Number;
 		
 		public var m_FurthestX:int;
 		
@@ -20,6 +21,7 @@
 			m_FurthestX = 0;
 			m_HSGoalComplete = 0;
 			m_CollegeGoalComplete = 0;
+			m_MoneyCap = 100;
 		}
 		
 		private function UpdateLevelInfo(xpos:int):void

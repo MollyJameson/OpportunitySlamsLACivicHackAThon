@@ -205,6 +205,17 @@
 			trace("Loading levelname: " + level_name);
 	
 			var test_level:LevelData = new LevelData();
+			
+			if( Number(xmldata.money_cap)  )
+			{
+				trace("Setting money cap at: " + xmldata.money_cap);
+				test_level.m_MoneyCap = xmldata.money_cap;
+			}
+			else
+			{
+				trace("no money cap");
+			}
+			
 			var pickups:XMLList = xmldata.pickups;
 			if( pickups )
 			{

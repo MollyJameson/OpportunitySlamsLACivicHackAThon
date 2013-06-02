@@ -111,9 +111,11 @@
 			
 			this.UpdateRestrictions();
 			
-			m_HUD[Player.RES_HEALTH].Reset();
-			m_HUD[Player.RES_EMO].Reset();
-			m_HUD[Player.RES_MONEY].Reset();
+			m_Player.m_MoneyCap = this.m_CurrLevelData.m_MoneyCap;
+			
+			m_HUD[Player.RES_HEALTH].Reset(m_Player.m_MoneyCap);
+			m_HUD[Player.RES_EMO].Reset(m_Player.m_MoneyCap);
+			m_HUD[Player.RES_MONEY].Reset(m_Player.m_MoneyCap);
 		}
 		
 		
@@ -174,7 +176,8 @@
 				UpdateRestrictions();
 			}
 			
-			this.inst_location.text = "world: " + int(m_World.x) + " , " +  int(m_World.y) + " avatar " + int(m_Player.x) + " , " + int(m_Player.y);
+			//this.inst_location.text = "world: " + int(m_World.x) + " , " +  int(m_World.y) + " avatar " + int(m_Player.x) + " , " + int(m_Player.y);
+			this.inst_location.visible = false;
 			
 			var m_LastGoodPosX:Number = m_Player.x;
 			var m_LastGoodPosY:Number = m_Player.y;
