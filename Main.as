@@ -168,22 +168,42 @@
 			}
 		}
 		
-		public function GetLevelData(str:String):LevelData
+		// hack for the gamestates. Time to submission 1 hour.
+		public var m_RequestedLevelName:String = "test";
+		public var m_NumRequests:int = 0;
+		public var m_NumCompletes:int = 0;
+		public function GetLevelData(str:String="test"):LevelData
 		{
-			return m_Levels[str];
+			return m_Levels[m_RequestedLevelName];
 		}
+		
 		
 		private function loadXMLFile():void
 		{
 			var loader= new URLLoader(new URLRequest("data/TestLevel.xml"));
 			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+			
+			loader = new URLLoader(new URLRequest("data/BoyleHeightsLevel.xml"));
+			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+			
+			loader = new URLLoader(new URLRequest("data/FunLevel.xml"));
+			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+			
+			loader = new URLLoader(new URLRequest("data/WeHoLevel.xml"));
+			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+			
+			m_NumRequests = 4;
 		}
 		private function loadedCompleteHandler(e:Event):void
 		{
+			m_NumCompletes++;
 			// TODO: IF I Had more time there would be way way more error checking here.
 			e.target.removeEventListener(Event.COMPLETE, loadedCompleteHandler);
 			var xmldata:XML = XML(e.target.data);
 			
+			var level_name:String = xmldata.@level_name;
+			trace("Loading levelname: " + level_name);
+	
 			var test_level:LevelData = new LevelData();
 			var pickups:XMLList = xmldata.pickups;
 			if( pickups )
@@ -193,7 +213,7 @@
 				{
 					for each (var pickup_items:XML in item_list) 
 					{
-						trace("pickup_items: " + pickup_items);
+						//trace("pickup_items: " + pickup_items);
 						test_level.AddPickUp(pickup_items);
 					}
 				}
@@ -244,13 +264,13 @@
 			// Get goal data ( very specificly named )
 			// Get drips
 			var drips:XMLList = xmldata.drips;
-			trace("drips: " + drips);
+			//trace("drips: " + drips);
 			if( drips.money )
 			{
 				test_level.AddMoneyDripRate(drips.money);
 			}
 			
-			m_Levels["test"] = test_level;
+			m_Levels[level_name] = test_level;
 		}
 		
 	}

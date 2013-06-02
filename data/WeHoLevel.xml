@@ -1,4 +1,4 @@
-<level level_name="test">
+<level level_name="WeHo">
 	<drips>
 		<money>5</money>
 	</drips>
@@ -81,26 +81,5 @@
 			<amount>20</amount>
 		</item>
 	</pickups>
-	<obstacles>
-		<item>
-			<ObstacleType>Impossible</ObstacleType>
-			<x>600</x>
-			<y>100</y>
-			<w>200</w>
-			<h>200</h>
-			<chance>1</chance>
-			<label>Budget Cuts</label>
-		</item>
-		
-		<item>
-			<ObstacleType>Impossible</ObstacleType>
-			<x>1000</x>
-			<y>200</y>
-			<w>200</w>
-			<h>300</h>
-			<chance>1</chance>
-			<label>Natural Disater</label>
-		</item>
-	</obstacles>
 	
 </level>

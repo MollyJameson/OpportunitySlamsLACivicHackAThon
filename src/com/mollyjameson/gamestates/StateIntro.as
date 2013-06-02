@@ -56,6 +56,20 @@
 
 		}
 		
+		override public function Update():void
+		{
+			super.Update();
+			
+			if( Main.Inst.m_NumCompletes >= Main.Inst.m_NumRequests )
+			{
+				m_PlayBtn.enabled = true;
+			}
+			else
+			{
+				m_PlayBtn.enabled = false;
+			}
+		}
+		
 		private function onMouseOverBtn(ev:MouseEvent):void
 		{
 			var mc:MovieClip = ev.currentTarget as MovieClip;
@@ -82,24 +96,28 @@
 				{
 					Main.Inst.level_number = Main.WEHO;
 					Main.Inst.is_fun_version = false;
+					Main.Inst.m_RequestedLevelName = "WeHo";
 				}
 				else if( mc.name == "btn_1")
 				{
 					Main.Inst.level_number = Main.BOYLE_HEIGHT;
 					Main.Inst.is_fun_version = false;
+					Main.Inst.m_RequestedLevelName = "BoyleHeights";
 				}
 				else if( mc.name == "btn_2")
 				{
 					Main.Inst.level_number = Main.LEIMERT_PARK;
 					Main.Inst.is_fun_version = true;
+					Main.Inst.m_RequestedLevelName = "Fun";
 				}
 				else if( mc.name == "btn_3")
 				{
 					Main.Inst.level_number = Main.TORRANCE;
 					Main.Inst.is_fun_version = true;
+					Main.Inst.m_RequestedLevelName = "Fun";
 				}
+				requestState("game");
 			}
-			requestState("game");
 		}
 		
 		private function requestState(requested:String):void
@@ -116,6 +134,7 @@
 		public function onMouseClicked(ev:MouseEvent):void
 		{
 			Main.Inst.is_fun_version = true;
+			Main.Inst.m_RequestedLevelName = "Test";
 			requestState("game");
 		}
 		
@@ -127,6 +146,7 @@
 		public function OnRealisticVersionClicked(ev:MouseEvent):void
 		{
 			Main.Inst.is_fun_version = false;
+			Main.Inst.m_RequestedLevelName = "Test";
 			requestState("game");
 		}
 	}

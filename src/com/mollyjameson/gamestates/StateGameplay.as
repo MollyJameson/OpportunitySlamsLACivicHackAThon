@@ -305,7 +305,7 @@
 		private function InitTestLevel():void
 		{
 			
-			var level_data:LevelData = Main.Inst.GetLevelData("test");
+			var level_data:LevelData = Main.Inst.GetLevelData();
 			m_ArrPowerUps = level_data.m_ArrPowerUps;
 			m_ArrObstacles = level_data.m_ArrObstacles;
 			
@@ -363,7 +363,12 @@
 					}
 					//trace("college degree required and " + complete_college_goal);
 				}
-				if( curr_money >= power_up.GetMoneyRequirement() && edu_allow )
+				// special case so can't keep going to college.
+				if( power_up.GetPowerUpType() == PowerUp.COLLEGE_DIPLOMA && complete_college_goal )
+				{
+					power_up.visible = false;
+				}
+				else if( curr_money >= power_up.GetMoneyRequirement() && edu_allow )
 				{
 					power_up.visible = true;
 				}
