@@ -103,6 +103,11 @@
 				impossible_test.x = obstacle.x; impossible_test.y = obstacle.y;
 				// String num confusion in ECMA script :(
 				UpdateLevelInfo(int(impossible_test.x) + int(obstacle.w));
+				
+				if(obstacle.label )
+				{
+					impossible_test.SetLabel(obstacle.label);
+				}
 			}
 		}
 		

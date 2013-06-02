@@ -110,6 +110,10 @@
 			InitTestLevel();
 			
 			this.UpdateRestrictions();
+			
+			m_HUD[Player.RES_HEALTH].Reset();
+			m_HUD[Player.RES_EMO].Reset();
+			m_HUD[Player.RES_MONEY].Reset();
 		}
 		
 		

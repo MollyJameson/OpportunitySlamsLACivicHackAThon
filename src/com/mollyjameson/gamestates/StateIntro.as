@@ -75,7 +75,30 @@
 		private function onMouseClickBtn(ev:MouseEvent):void
 		{
 			// whatever hack.
-			Main.Inst.is_fun_version = false;
+			var mc:MovieClip = ev.currentTarget as MovieClip;
+			if( mc )
+			{
+				if( mc.name == "btn_0")
+				{
+					Main.Inst.level_number = Main.WEHO;
+					Main.Inst.is_fun_version = false;
+				}
+				else if( mc.name == "btn_1")
+				{
+					Main.Inst.level_number = Main.BOYLE_HEIGHT;
+					Main.Inst.is_fun_version = false;
+				}
+				else if( mc.name == "btn_2")
+				{
+					Main.Inst.level_number = Main.LEIMERT_PARK;
+					Main.Inst.is_fun_version = true;
+				}
+				else if( mc.name == "btn_3")
+				{
+					Main.Inst.level_number = Main.TORRANCE;
+					Main.Inst.is_fun_version = true;
+				}
+			}
 			requestState("game");
 		}
 		

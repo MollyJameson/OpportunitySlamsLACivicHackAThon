@@ -31,5 +31,10 @@
 			this.graphics.drawRect(3,3,fill_width,H-3);
 			this.graphics.endFill();
 		}
+		
+		public function Reset():void
+		{
+			SetCurrValue(m_MaxValue);
+		}
 	}
 }

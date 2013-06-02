@@ -32,6 +32,12 @@
 		private var m_CurrState:BaseGameState;
 		public static var gameReady:Boolean = false;
 		public var is_fun_version:Boolean = false;
+		public var level_number:int = 0;
+		
+		public static var WEHO:int = 0;
+		public static var BOYLE_HEIGHT:int = 1;
+		public static var LEIMERT_PARK:int = 2;
+		public static var TORRANCE:int = 3;
 		
 		private var m_GameStates:Object =
 		{
@@ -90,6 +96,7 @@
 			Main.gameReady = true;
 			
 			m_CurrState = m_GameStates["intro"];
+			//m_CurrState = m_GameStates["outro"];
 			m_CurrState.Enter();
 			
 			this.addEventListener(Event.ENTER_FRAME, onFrame);

@@ -89,6 +89,7 @@
 			<w>200</w>
 			<h>200</h>
 			<chance>1</chance>
+			<label>Budget Cuts</label>
 		</item>
 		
 		<item>
@@ -98,6 +99,7 @@
 			<w>200</w>
 			<h>300</h>
 			<chance>1</chance>
+			<label>Natural Disater</label>
 		</item>
 	</obstacles>
 	
