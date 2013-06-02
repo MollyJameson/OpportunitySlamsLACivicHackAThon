@@ -19,6 +19,7 @@
 	import com.mollyjameson.hud.HudBar;
 	import com.mollyjameson.gameobjs.BlockingObstacle;
 	import com.mollyjameson.gameobjs.LevelData;
+	import com.mollyjameson.gameobjs.FloatyText;
 	
 
 	/**
@@ -30,6 +31,10 @@
 		
 		private var m_World:ScrollingWorld;
 		private var m_Player:Player;
+		
+		private var m_LastTime:int;
+		private var m_MoneyDripTimer:Number;
+		private var m_CurrLevelData:LevelData;
 		
 		// powerups you destroy on contact. Obstacles block movement on collision.
 		private var m_ArrPowerUps:Vector.<PowerUp>;
@@ -65,7 +70,7 @@
 		{
 			super.Enter();
 			
-			
+			m_LastTime = getTimer();
 			
 			
 			this.addChild(m_World);
@@ -128,8 +133,23 @@
 		override public function Update():void
 		{
 			super.Update();
+			var now:int = getTimer();
+			var delta:int = now - m_LastTime;
+			m_LastTime = now;
 			
-			m_World.Tick();
+			var dt:Number = delta/1000.0;
+			
+			m_World.Tick(dt);
+			
+			m_MoneyDripTimer -= dt;
+			//trace("Money drip timer: " + m_MoneyDripTimer);
+			if( m_MoneyDripTimer < 0 )
+			{
+				//trace("Modifying Money by: " + m_CurrLevelData.m_MoneyDrip);
+				var new_money:Number = m_Player.ModifyResource(Player.RES_MONEY,-m_CurrLevelData.m_MoneyDrip);
+				m_HUD[Player.RES_MONEY].SetCurrValue(new_money);
+				m_MoneyDripTimer = 1;
+			}
 			
 			this.inst_location.text = "world: " + int(m_World.x) + " , " +  int(m_World.y) + " avatar " + int(m_Player.x) + " , " + int(m_Player.y);
 			
@@ -177,8 +197,15 @@
 					// remove and give player the resource.
 					if( power_up.GetPowerUpType() == PowerUp.MONEY )
 					{
-						m_Player.ModifyResource(Player.RES_MONEY,5);
-						m_HUD[Player.RES_MONEY].SetCurrValue(-5);
+						var new_money_sub:Number = m_Player.ModifyResource(Player.RES_MONEY,20);
+						m_HUD[Player.RES_MONEY].SetCurrValue(new_money_sub);
+						
+						var float_text:FloatyText = new FloatyText();
+						float_text.x = global_pt.x; 
+						float_text.y = global_pt.y;
+						this.addChild(float_text);
+						float_text.Init("+Money",0x00FF00,m_HUD[Player.RES_MONEY].x,m_HUD[Player.RES_MONEY].y);
+						
 					}
 					else if( power_up.GetPowerUpType() == PowerUp.EMOTIONAL_SUPPORT )
 					{
@@ -190,10 +217,6 @@
 					m_ArrPowerUps.splice(i,1);
 				}
 			}
-			
-			//var m_LastGoodPosX:Number = m_Player.x;
-			//var m_LastGoodPosY:Number = m_Player.y;
-			
 			var obstacle_collision:Boolean = false;
 			len = m_ArrObstacles.length;
 			// warning we could remove in this loop.
@@ -219,7 +242,10 @@
 			{
 				NextState = "outro";
 			}
-			
+			if( m_Player.GetResource(Player.RES_MONEY) < 0 )
+			{
+				NextState = "outro";
+			}
 			
 			// TODO:
 			
@@ -258,7 +284,9 @@
 			{
 				m_World.addChild(m_ArrObstacles[j]);
 			}
+			m_CurrLevelData = level_data;
 			
+			m_MoneyDripTimer = 1;
 		}
 		
 		public override function onKeyDownEvent(ev:KeyboardEvent):void

@@ -1,4 +1,7 @@
 <level>
+	<drips>
+		<money>5</money>
+	</drips>
 	<goals>
 		<HSDiploma>
 			<PickupForComplete>3</PickupForComplete>

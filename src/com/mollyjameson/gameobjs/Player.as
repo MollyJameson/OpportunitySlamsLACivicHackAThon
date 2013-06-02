@@ -49,7 +49,7 @@
 		
 		public function ModifyResource(res_name:String, mod_amount:Number):Number
 		{
-			m_Resources[res_name] -= mod_amount
+			m_Resources[res_name] += mod_amount
 			return m_Resources[res_name];
 		}
 	}

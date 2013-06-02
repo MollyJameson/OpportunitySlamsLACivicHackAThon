@@ -194,6 +194,13 @@
 			// Get pickup data
 			// Get Obstacle data
 			// Get goal data ( very specificly named )
+			// Get drips
+			var drips:XMLList = xmldata.drips;
+			trace("drips: " + drips);
+			if( drips.money )
+			{
+				test_level.AddMoneyDripRate(drips.money);
+			}
 			
 			m_Levels["test"] = test_level;
 		}
