@@ -1,14 +1,20 @@
 <level level_name="BoyleHeights">
-	<drips>
+<money_cap>30</money_cap>
+<drips>
 		<money>5</money>
 	</drips>
 	<goals>
 		<HSDiploma>
-			<PickupForComplete>3</PickupForComplete>
+			<PickupForComplete>5</PickupForComplete>
+			<item>
+				<PickUpType>HSDiploma</PickUpType>
+				<x>440</x>
+				<y>200</y>
+			</item>
 			<item>
 				<PickUpType>HSDiploma</PickUpType>
 				<x>300</x>
-				<y>300</y>
+				<y>250</y>
 			</item>
 			<item>
 				<PickUpType>HSDiploma</PickUpType>
@@ -18,27 +24,20 @@
 			<item>
 				<PickUpType>HSDiploma</PickUpType>
 				<x>500</x>
-				<y>300</y>
+				<y>350</y>
 			</item>
 			<item>
 				<PickUpType>HSDiploma</PickUpType>
-				<x>500</x>
-				<y>10</y>
+				<x>600</x>
+				<y>300</y>
 			</item>
 		</HSDiploma>
 		<CollegeDiploma>
 			<PickupForComplete>1</PickupForComplete>
 			<item>
 				<PickUpType>CollegeDiploma</PickUpType>
-				<x>400</x>
-				<y>10</y>
-				<requires stat="money">10</requires>
-				<requires stat="goal">HSDiploma</requires>
-			</item>
-			<item>
-				<PickUpType>CollegeDiploma</PickUpType>
-				<x>1000</x>
-				<y>10</y>
+				<x>1055</x>
+				<y>100</y>
 				<requires stat="money">10</requires>
 				<requires stat="goal">HSDiploma</requires>
 			</item>
@@ -47,38 +46,68 @@
 	<pickups>
 		<item>
 			<PickUpType>money</PickUpType>
-			<x>100</x>
-			<y>50</y>
-			<amount>50</amount>
+			<x>1000</x>
+			<y>280</y>
+			<amount>5</amount>
 		</item>
 		<item>
-			<PickUpType>emo</PickUpType>
-			<x>1000</x>
-			<y>300</y>
-			<amount>50</amount>
-			<requires stat="goal">HSDiploma</requires>
-			<chance>0.5</chance>
+			<PickUpType>money</PickUpType>
+			<x>600</x>
+			<y>200</y>
+			<amount>5</amount>
+		</item>
+		<item>
+			<PickUpType>money</PickUpType>
+			<x>200</x>
+			<y>150</y>
+			<amount>5</amount>
 		</item>
 		<item>
 			<PickUpType>JobCashier</PickUpType>
-			<x>200</x>
-			<y>0</y>
-			<amount>5</amount>
+			<x>300</x>
+			<y>400</y>
+			<amount>10</amount>
+		</item>
+		<item>
+			<PickUpType>JobCashier</PickUpType>
+			<x>535</x>
+			<y>400</y>
+			<amount>10</amount>
+		</item>
+		<item>
+			<PickUpType>JobCashier</PickUpType>
+			<x>880</x>
+			<y>100</y>
+			<amount>10</amount>
+		</item>
+		<item>
+			<PickUpType>JobCashier</PickUpType>
+			<x>495</x>
+			<y>370</y>
+			<amount>10</amount>
+		</item>
+		<item>
+			<PickUpType>JobComputer</PickUpType>
+			<x>800</x>
+			<y>395</y>
+			<requires stat="goal">HSDiploma</requires>
+			<chance>0.5</chance>
+			<amount>20</amount>
 		</item>
 		<item>
 			<PickUpType>JobComputer</PickUpType>
 			<x>300</x>
-			<y>0</y>
+			<y>350</y>
 			<requires stat="goal">HSDiploma</requires>
 			<chance>0.5</chance>
-			<amount>10</amount>
+			<amount>20</amount>
 		</item>
 		<item>
 			<PickUpType>JobDoctor</PickUpType>
 			<x>1200</x>
-			<y>0</y>
+			<y>245</y>
 			<requires stat="goal">CollegeDiploma</requires>
-			<amount>20</amount>
+			<amount>30</amount>
 		</item>
 	</pickups>
 	<obstacles>
@@ -94,12 +123,12 @@
 		
 		<item>
 			<ObstacleType>Impossible</ObstacleType>
-			<x>1000</x>
+			<x>1500</x>
 			<y>200</y>
 			<w>200</w>
 			<h>300</h>
 			<chance>1</chance>
-			<label>Natural Disater</label>
+			<label>Natural Disaster</label>
 		</item>
 	</obstacles>
 	
