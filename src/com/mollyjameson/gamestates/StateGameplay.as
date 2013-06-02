@@ -63,11 +63,14 @@
 			m_HUD[Player.RES_EMO].y = Main.H - m_HUD[Player.RES_EMO].height; m_HUD[Player.RES_EMO].x = 10;
 			m_HUD[Player.RES_MONEY].y = m_HUD[Player.RES_EMO].y - m_HUD[Player.RES_MONEY].height; m_HUD[Player.RES_MONEY].x = 10;
 			m_HUD[Player.RES_HEALTH].y = m_HUD[Player.RES_MONEY].y - m_HUD[Player.RES_HEALTH].height; m_HUD[Player.RES_HEALTH].x = 10;
+			
+			
+			this.addChild(m_World);
+			
+			// on top of the world
 			this.addChild(m_HUD[Player.RES_HEALTH]);
 			this.addChild(m_HUD[Player.RES_EMO]);
 			this.addChild(m_HUD[Player.RES_MONEY]);
-			
-			this.addChild(m_World);
 			
 		}
 		override public function Enter():void 
@@ -328,8 +331,6 @@
 						edu_allow = false;
 					}
 				}
-				trace("Curr Money: " + curr_money);
-				trace("Money req: " + power_up.GetMoneyRequirement() );
 				if( curr_money >= power_up.GetMoneyRequirement() && edu_allow )
 				{
 					power_up.visible = true;

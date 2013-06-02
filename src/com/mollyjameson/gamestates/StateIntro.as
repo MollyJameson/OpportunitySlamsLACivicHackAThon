@@ -6,6 +6,7 @@
 	
 	import flash.text.TextFormat;
 	import flash.media.Sound;
+	import flash.display.MovieClip;
 
 	/**
 	 * ...
@@ -30,6 +31,18 @@
 			m_OptionsBtn = addBtn( 568, 385, "title_btn_options", onOptionsClicked );
 			
 			m_OptionsBtn.enabled = false;
+			
+			for(var i:int = 0; i < 4; ++i )
+			{
+				var mc_btn:MovieClip = this["btn_" + i];
+				if( mc_btn )
+				{
+					mc_btn.addEventListener(MouseEvent.CLICK,onMouseClickBtn);
+					mc_btn.addEventListener(MouseEvent.MOUSE_OVER,onMouseOverBtn);
+					mc_btn.addEventListener(MouseEvent.MOUSE_OUT,onMouseOutBtn);
+					mc_btn.gotoAndStop(1);
+				}
+			}
 		}
 		
 		override public function Enter():void 
@@ -41,6 +54,29 @@
 			m_PlayBtn2.label = "Play Real Version";
 			m_OptionsBtn.label = "More Info";
 
+		}
+		
+		private function onMouseOverBtn(ev:MouseEvent):void
+		{
+			var mc:MovieClip = ev.currentTarget as MovieClip;
+			if( mc )
+			{
+				mc.gotoAndStop(2);
+			}
+		}
+		private function onMouseOutBtn(ev:MouseEvent):void
+		{
+			var mc:MovieClip = ev.currentTarget as MovieClip;
+			if( mc )
+			{
+				mc.gotoAndStop(1);
+			}
+		}
+		private function onMouseClickBtn(ev:MouseEvent):void
+		{
+			// whatever hack.
+			Main.Inst.is_fun_version = false;
+			requestState("game");
 		}
 		
 		private function requestState(requested:String):void
