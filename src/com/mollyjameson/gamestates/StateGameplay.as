@@ -372,6 +372,10 @@
 				{
 					power_up.visible = false;
 				}
+				else if( power_up.GetPowerUpType() == PowerUp.HSDIPLOMA && completed_hs_goal )
+				{
+					power_up.visible = false;
+				}
 				else if( curr_money >= power_up.GetMoneyRequirement() && edu_allow )
 				{
 					power_up.visible = true;
