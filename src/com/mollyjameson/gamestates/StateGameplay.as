@@ -40,6 +40,7 @@
 		private var m_ArrPowerUps:Vector.<PowerUp>;
 		private var m_ArrObstacles:Vector.<BlockingObstacle>;
 		private var m_HSPowerUps:int;
+		private var m_CollegePowerUps:int;
 		
 		private var m_HUD:Object;
 		
@@ -107,6 +108,8 @@
 			}
 			
 			InitTestLevel();
+			
+			this.UpdateRestrictions();
 		}
 		
 		
@@ -211,21 +214,21 @@
 				{
 					if( power_up.hitTestObject(m_Player) )
 					{
-						// remove and give player the resource.
-						if( power_up.GetPowerUpType() == PowerUp.MONEY )
+						
+						if( power_up.GetMoneyAmount() > 0 )
 						{
-							var new_money_sub:Number = m_Player.ModifyResource(Player.RES_MONEY,20);
+							var new_money_sub:Number = m_Player.ModifyResource(Player.RES_MONEY,power_up.GetMoneyAmount());
 							m_HUD[Player.RES_MONEY].SetCurrValue(new_money_sub);
 							
 							var float_text:FloatyText = new FloatyText();
 							float_text.x = global_pt.x; 
 							float_text.y = global_pt.y;
 							this.addChild(float_text);
-							float_text.Init("+Money",0x00FF00,m_HUD[Player.RES_MONEY].x,m_HUD[Player.RES_MONEY].y);
+							float_text.Init("+Money " + power_up.GetMoneyAmount(),0x00FF00,m_HUD[Player.RES_MONEY].x,m_HUD[Player.RES_MONEY].y);
 							UpdateRestrictions();
-							
 						}
-						else if( power_up.GetPowerUpType() == PowerUp.EMOTIONAL_SUPPORT )
+						// remove and give player the resource.
+						if( power_up.GetPowerUpType() == PowerUp.EMOTIONAL_SUPPORT )
 						{
 							m_Player.ModifyResource(Player.RES_EMO,5);
 							m_HUD[Player.RES_EMO].SetCurrValue(-5);
@@ -234,6 +237,14 @@
 						{
 							m_HSPowerUps++;
 							if( m_HSPowerUps >= this.m_CurrLevelData.m_HSGoalComplete )
+							{
+								// Show or hide any obstacles that get in the way.
+								UpdateRestrictions();
+							}
+						}
+						else if( power_up.GetPowerUpType() == PowerUp.COLLEGE_DIPLOMA )
+						{
+							if( m_CollegePowerUps >= this.m_CurrLevelData.m_CollegeGoalComplete )
 							{
 								// Show or hide any obstacles that get in the way.
 								UpdateRestrictions();
@@ -317,6 +328,12 @@
 			{
 				completed_hs_goal = true;
 			}
+			var complete_college_goal:Boolean = false;
+			if( m_CollegePowerUps >= this.m_CurrLevelData.m_CollegeGoalComplete )
+			{
+				complete_college_goal = false;
+			}
+			
 			var curr_money:int = m_Player.GetResource(Player.RES_MONEY);
 			var len:int = m_ArrPowerUps.length;
 			for( var i:int = 0; i < len; ++i )
@@ -327,6 +344,13 @@
 				if( power_up.GetHSDiplomaRequirement() )
 				{
 					if( !completed_hs_goal )
+					{
+						edu_allow = false;
+					}
+				}
+				if( power_up.GetCollegeDiplomaRequirement() )
+				{
+					if( !complete_college_goal )
 					{
 						edu_allow = false;
 					}

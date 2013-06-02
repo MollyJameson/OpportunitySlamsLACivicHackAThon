@@ -36,17 +36,33 @@
 			trace("what the hell: " + pickup);
 			trace("Pickup type: " + pickup.PickUpType );
 			var pickup_obj:PowerUp = null;
-			if(pickup.PickUpType == "money")
+			
+			// just being really explicit with this so I can control whats changing.
+			// obviously there are less terrible ways of doing this
+			var frame_mapping:Object = 
 			{
-				pickup_obj = new PowerUp(PowerUp.MONEY);
+				"money": PowerUp.MONEY,
+				"HSDiploma": PowerUp.HSDIPLOMA,
+				"CollegeDiploma": PowerUp.COLLEGE_DIPLOMA,
+				"JobCashier": PowerUp.JOB_CASHIER,
+				"JobComputer": PowerUp.JOB_COMPUTER,
+				"JobDoctor": PowerUp.JOB_DOCTOR
+			};
+			
+			if( frame_mapping[pickup.PickUpType] )
+			{
+				var power_up_id:int = frame_mapping[pickup.PickUpType];
+				pickup_obj = new PowerUp(power_up_id);
+				
+				if( pickup.amount )
+				{
+					trace("pickup amount" + pickup.amount);
+					pickup_obj.SetMoneyAmount(pickup.amount);
+				}
 			}
-			else if(pickup.PickUpType == "HSDiploma")
+			else
 			{
-				pickup_obj = new PowerUp(PowerUp.HSDIPLOMA);
-			}
-			else if(pickup.PickUpType == "CollegeDiploma")
-			{
-				pickup_obj = new PowerUp(PowerUp.COLLEGE_DIPLOMA);
+				trace("no powerup of ID found " + pickup.PickUpType);
 			}
 			if( pickup_obj )
 			{
@@ -61,7 +77,14 @@
 					}
 					if( requirement.@stat == "goal" )
 					{
-						pickup_obj.SetHSDiplomaRequirement(true);
+						if( requirement == "HSDiploma")
+						{
+							pickup_obj.SetHSDiplomaRequirement(true);
+						}
+						else if( requirement == "CollegeDiploma")
+						{
+							pickup_obj.SetCollegeDiplomaRequirement(true);
+						}
 					}
 				}
 				m_ArrPowerUps.push(pickup_obj);
@@ -79,7 +102,7 @@
 				m_ArrObstacles.push( impossible_test );
 				impossible_test.x = obstacle.x; impossible_test.y = obstacle.y;
 				// String num confusion in ECMA script :(
-				UpdateLevelInfo(int(impossible_test.x) + int(obstacle.w))
+				UpdateLevelInfo(int(impossible_test.x) + int(obstacle.w));
 			}
 		}
 		
