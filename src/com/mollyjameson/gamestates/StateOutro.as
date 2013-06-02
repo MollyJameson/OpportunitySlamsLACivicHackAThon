@@ -78,20 +78,16 @@
 				var other_facts:Array = 
 				[
 				 "The median income of a resident of Boyle Heights is $29,524, nearly half the median income for all of LA County.",
-				 "Less than half of residents are high school graduates (48%) and only 7% hold a Bachelors degree or higher.",
+				 "Less than half of Boyle Heights residents are high school graduates (48%) and only 7% hold a Bachelors degree or higher.",
 				 "A third of the people living in Boyle Heights are living under the poverty line (33%), and half of them are single mothers (49%).",
 				 ];
 				 
 				 str = other_facts[m_TimesInState % other_facts.length];
 			}
-			
 			str += "\n\n Figures taken from the 2011 ACS 5-Year Estimates";
-			
-			
-			
+
 			m_TF.text = str;
-			
-			
+
 			m_TimesInState++;
 		}
 		

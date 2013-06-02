@@ -49,7 +49,10 @@
 				"JobDoctor": PowerUp.JOB_DOCTOR
 			};
 			
-			if( frame_mapping[pickup.PickUpType] )
+			trace(frame_mapping["money"] + " should exist");
+			trace(frame_mapping[pickup.PickUpType] + " label of " + pickup.PickUpType);
+			
+			if( frame_mapping[pickup.PickUpType] != null )
 			{
 				var power_up_id:int = frame_mapping[pickup.PickUpType];
 				pickup_obj = new PowerUp(power_up_id);

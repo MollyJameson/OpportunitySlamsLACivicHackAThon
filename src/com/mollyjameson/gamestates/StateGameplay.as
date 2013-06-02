@@ -58,9 +58,9 @@
 			
 			m_HUD = new Object();
 			
-			m_HUD[Player.RES_HEALTH] = new HudBar(0xFF0000,m_Player.GetMaxResource(Player.RES_HEALTH));
-			m_HUD[Player.RES_MONEY] = new HudBar(0x00FF00,m_Player.GetMaxResource(Player.RES_MONEY));
-			m_HUD[Player.RES_EMO] = new HudBar(0x0000FF,m_Player.GetMaxResource(Player.RES_EMO));
+			m_HUD[Player.RES_HEALTH] = new HudBar(0xFF0000,m_Player.GetMaxResource(Player.RES_HEALTH),0.3);
+			m_HUD[Player.RES_MONEY] = new HudBar(0x00FF00,m_Player.GetMaxResource(Player.RES_MONEY),0.3);
+			m_HUD[Player.RES_EMO] = new HudBar(0x0000FF,m_Player.GetMaxResource(Player.RES_EMO),0.3);
 			m_HUD[Player.RES_EMO].y = Main.H - m_HUD[Player.RES_EMO].height; m_HUD[Player.RES_EMO].x = 10;
 			m_HUD[Player.RES_MONEY].y = m_HUD[Player.RES_EMO].y - m_HUD[Player.RES_MONEY].height; m_HUD[Player.RES_MONEY].x = 10;
 			m_HUD[Player.RES_HEALTH].y = m_HUD[Player.RES_MONEY].y - m_HUD[Player.RES_HEALTH].height; m_HUD[Player.RES_HEALTH].x = 10;
@@ -180,6 +180,7 @@
 			var m_LastGoodPosY:Number = m_Player.y;
 			
 			const PLAYER_SPEED:Number = 5;
+			//const PLAYER_SPEED:Number = 20;
 			if( m_UpPressed && m_Player.y > 0)
 			{
 				m_Player.y -= PLAYER_SPEED;
@@ -248,6 +249,7 @@
 						}
 						else if( power_up.GetPowerUpType() == PowerUp.COLLEGE_DIPLOMA )
 						{
+							m_CollegePowerUps++;
 							if( m_CollegePowerUps >= this.m_CurrLevelData.m_CollegeGoalComplete )
 							{
 								// Show or hide any obstacles that get in the way.
@@ -335,8 +337,9 @@
 			var complete_college_goal:Boolean = false;
 			if( m_CollegePowerUps >= this.m_CurrLevelData.m_CollegeGoalComplete )
 			{
-				complete_college_goal = false;
+				complete_college_goal = true;
 			}
+			//trace("College goal levels " + m_CollegePowerUps + " of " + this.m_CurrLevelData.m_CollegeGoalComplete);
 			
 			var curr_money:int = m_Player.GetResource(Player.RES_MONEY);
 			var len:int = m_ArrPowerUps.length;
@@ -358,6 +361,7 @@
 					{
 						edu_allow = false;
 					}
+					//trace("college degree required and " + complete_college_goal);
 				}
 				if( curr_money >= power_up.GetMoneyRequirement() && edu_allow )
 				{
