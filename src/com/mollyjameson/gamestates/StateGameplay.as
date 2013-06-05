@@ -92,6 +92,7 @@
 			m_LeftPressed = false;
 			m_RightPressed = false;
 			m_HSPowerUps = 0;
+			m_CollegePowerUps = 0;
 			
 			m_ArrPowerUps = new Vector.<PowerUp>();
 			m_ArrObstacles = new Vector.<BlockingObstacle>;
@@ -259,6 +260,8 @@
 								UpdateRestrictions();
 							}
 						}
+						var happySound:Sound = new SoundCakeAndFireworks();
+						happySound.play();
 						
 						m_World.removeChild(power_up);
 						m_ArrPowerUps.splice(i,1);
@@ -391,19 +394,19 @@
 		{
 			//trace("on key down: " + ev);
 			
-			if( ev.keyCode == Keyboard.UP )
+			if( ev.keyCode == Keyboard.UP || ev.keyCode == Keyboard.W )
 			{
 				m_UpPressed = true;
 			}
-			if( ev.keyCode == Keyboard.DOWN )
+			if( ev.keyCode == Keyboard.DOWN || ev.keyCode == Keyboard.S )
 			{
 				m_DownPressed = true;
 			}
-			if( ev.keyCode == Keyboard.LEFT )
+			if( ev.keyCode == Keyboard.LEFT || ev.keyCode == Keyboard.A )
 			{
 				m_LeftPressed = true;
 			}
-			if( ev.keyCode == Keyboard.RIGHT )
+			if( ev.keyCode == Keyboard.RIGHT || ev.keyCode == Keyboard.D)
 			{
 				m_RightPressed = true;
 			}
@@ -411,19 +414,19 @@
 		public override function onKeyUpEvent(ev:KeyboardEvent):void
 		{
 			//trace("on key up: " + ev);
-			if( ev.keyCode == Keyboard.UP )
+			if( ev.keyCode == Keyboard.UP || ev.keyCode == Keyboard.W )
 			{
 				m_UpPressed = false;
 			}
-			if( ev.keyCode == Keyboard.DOWN )
+			if( ev.keyCode == Keyboard.DOWN || ev.keyCode == Keyboard.S )
 			{
 				m_DownPressed = false;
 			}
-			if( ev.keyCode == Keyboard.LEFT )
+			if( ev.keyCode == Keyboard.LEFT || ev.keyCode == Keyboard.A )
 			{
 				m_LeftPressed = false;
 			}
-			if( ev.keyCode == Keyboard.RIGHT )
+			if( ev.keyCode == Keyboard.RIGHT || ev.keyCode == Keyboard.D)
 			{
 				m_RightPressed = false;
 			}

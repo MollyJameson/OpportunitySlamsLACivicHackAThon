@@ -26,13 +26,13 @@
 		
 		override public function Init():void
 		{
-			m_PlayBtn = addBtn( 113, 385, "title_btn_play", onMouseClicked );
-			m_PlayBtn2 = addBtn( 333, 385, "title_btn_play", OnRealisticVersionClicked );
-			m_OptionsBtn = addBtn( 568, 385, "title_btn_options", onOptionsClicked );
+			//m_PlayBtn = addBtn( 113, 385, "title_btn_play", onMouseClicked );
+			//m_PlayBtn2 = addBtn( 333, 385, "title_btn_play", OnRealisticVersionClicked );
+			m_OptionsBtn = addBtn( 333, 385, "title_btn_options", onOptionsClicked );
 			
-			m_OptionsBtn.enabled = false;
+			//m_OptionsBtn.enabled = false;
 			
-			for(var i:int = 0; i < 4; ++i )
+			for(var i:int = 0; i < 2; ++i )
 			{
 				var mc_btn:MovieClip = this["btn_" + i];
 				if( mc_btn )
@@ -50,8 +50,8 @@
 			super.Enter();
 			
 			// reset labels in case we've changed languages
-			m_PlayBtn.label = "Play Game";
-			m_PlayBtn2.label = "Play Real Version";
+			//m_PlayBtn.label = "Play Game";
+			//m_PlayBtn2.label = "Play Real Version";
 			m_OptionsBtn.label = "More Info";
 
 		}
@@ -60,14 +60,14 @@
 		{
 			super.Update();
 			
-			if( Main.Inst.m_NumCompletes >= Main.Inst.m_NumRequests )
+			/*if( Main.Inst.m_NumCompletes >= Main.Inst.m_NumRequests )
 			{
 				m_PlayBtn.enabled = true;
 			}
 			else
 			{
 				m_PlayBtn.enabled = false;
-			}
+			}*/
 		}
 		
 		private function onMouseOverBtn(ev:MouseEvent):void
@@ -140,8 +140,7 @@
 		
 		public function onOptionsClicked(ev:MouseEvent):void
 		{
-			//Main.Inst.showIntermediateAd();
-			requestState("options");
+			requestState("info");
 		}
 		public function OnRealisticVersionClicked(ev:MouseEvent):void
 		{

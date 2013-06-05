@@ -20,12 +20,14 @@
 	import flash.text.TextFieldAutoSize;
 	import com.mollyjameson.gameobjs.LevelData;
 	import flash.events.KeyboardEvent;
+	import flash.media.SoundChannel;
+	import com.mollyjameson.gamestates.StateInfo;
 	
 	public class Main extends Sprite 
 	{
 		public static const W:int = 800;
 		public static const H:int = 480;
-		public static const VERSION_NUM:String = "V 0.0.5";
+		public static const VERSION_NUM:String = "V 0.5.5";
 		public static var Inst:Main;
 		public static var rand:Random;
 		
@@ -39,11 +41,14 @@
 		public static var LEIMERT_PARK:int = 2;
 		public static var TORRANCE:int = 3;
 		
+		private static var LOOSE_LOAD_ASSETS:Boolean = false;
+		
 		private var m_GameStates:Object =
 		{
 			"intro":new StateIntro(),
 			"game":new StateGameplay(),
-			"outro":new StateOutro()
+			"outro":new StateOutro(),
+			"info":new StateInfo()
 		}
 		private var m_GameStateLayer:Sprite;
 		
@@ -81,7 +86,7 @@
 			m_GameStateLayer = new Sprite();
 			this.addChild(m_GameStateLayer);
 			
-			/*var mute_btn:Button = new Button();
+			var mute_btn:Button = new Button();
 			mute_btn.enabled = true;
 			mute_btn.toggle = true;
 			mute_btn.setStyle("icon",SpeakerOn);
@@ -89,7 +94,8 @@
 			mute_btn.move(W - 50, 10);
 			mute_btn.label = "";
 			this.addChild(mute_btn);
-			mute_btn.addEventListener(Event.CHANGE, changeHandler);*/
+			mute_btn.addEventListener(Event.CHANGE, changeHandler);
+			playBGM();
 			
 			loadXMLFile();
 			
@@ -134,12 +140,26 @@
 			}
 			else
 			{
-				SoundMixer.stopAll();
+				//SoundMixer.stopAll();
 				var mute_transform:SoundTransform = new SoundTransform(0);
 				SoundMixer.soundTransform = mute_transform;
 				
 				mute_btn.setStyle("icon",SpeakerOff);
 			}
+		}
+		
+		private var m_BGMMusic:BG_Music = new BG_Music();
+		
+		private function playBGM():void
+		{
+			var channel:SoundChannel = m_BGMMusic.play();
+			channel.addEventListener(Event.SOUND_COMPLETE, onBGMComplete);
+		}
+		
+		private function onBGMComplete(event:Event):void
+		{
+			SoundChannel(event.target).removeEventListener(event.type, onBGMComplete);
+			playBGM();
 		}
 		
 		public function AttachGameState(gamestate:BaseGameState):void
@@ -177,45 +197,54 @@
 			return m_Levels[m_RequestedLevelName];
 		}
 		
+		[Embed(source='data/BoyleHeightsLevel.xml', mimeType="application/octet-stream")]
+    	public static const LevelBoyleHeights:Class; 
+		
+		[Embed(source='data/WeHoLevel.xml', mimeType="application/octet-stream")]
+    	public static const LevelWeHo:Class; 
 		
 		private function loadXMLFile():void
 		{
-			var loader= new URLLoader(new URLRequest("data/TestLevel.xml"));
-			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
-			
-			loader = new URLLoader(new URLRequest("data/BoyleHeightsLevel.xml"));
-			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
-			
-			loader = new URLLoader(new URLRequest("data/FunLevel.xml"));
-			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
-			
-			loader = new URLLoader(new URLRequest("data/WeHoLevel.xml"));
-			loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
-			
-			m_NumRequests = 4;
+			if( LOOSE_LOAD_ASSETS )
+			{
+				var loader:URLLoader = new URLLoader(new URLRequest("data/BoyleHeightsLevel.xml"));
+				loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+				/*loader= new URLLoader(new URLRequest("data/TestLevel.xml"));
+				loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+				loader = new URLLoader(new URLRequest("data/FunLevel.xml"));
+				loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);*/
+				loader = new URLLoader(new URLRequest("data/WeHoLevel.xml"));
+				loader.addEventListener(Event.COMPLETE, loadedCompleteHandler);
+				m_NumRequests = 2;
+			}
+			else
+			{
+				var boyle_heights:XML = new XML( new LevelBoyleHeights() );
+				parseXML(boyle_heights);
+				var weho:XML = new XML( new LevelWeHo() );
+				parseXML(weho);
+			}
 		}
-		private function loadedCompleteHandler(e:Event):void
+		
+		// This is a terrible last minute hack job of file parsing
+		private function parseXML(xmldata:XML):void
 		{
-			m_NumCompletes++;
-			// TODO: IF I Had more time there would be way way more error checking here.
-			e.target.removeEventListener(Event.COMPLETE, loadedCompleteHandler);
-			var xmldata:XML = XML(e.target.data);
+			// Get pickup data
+			// Get Obstacle data
+			// Get goal data ( very specificly named )
+			// Get drips
 			
 			var level_name:String = xmldata.@level_name;
 			trace("Loading levelname: " + level_name);
 	
 			var test_level:LevelData = new LevelData();
 			
+			// TODO: more error checking if we make more levels.
+			// this parsing makes me sad but time limit.
 			if( Number(xmldata.money_cap)  )
 			{
-				trace("Setting money cap at: " + xmldata.money_cap);
 				test_level.m_MoneyCap = xmldata.money_cap;
 			}
-			else
-			{
-				trace("no money cap");
-			}
-			
 			var pickups:XMLList = xmldata.pickups;
 			if( pickups )
 			{
@@ -270,18 +299,22 @@
 					}
 				}
 			}
-			// Get pickup data
-			// Get Obstacle data
-			// Get goal data ( very specificly named )
-			// Get drips
+			
 			var drips:XMLList = xmldata.drips;
-			//trace("drips: " + drips);
 			if( drips.money )
 			{
 				test_level.AddMoneyDripRate(drips.money);
 			}
 			
 			m_Levels[level_name] = test_level;
+		}
+		private function loadedCompleteHandler(e:Event):void
+		{
+			m_NumCompletes++;
+			// TODO: IF I Had more time there would be way way more error checking here.
+			e.target.removeEventListener(Event.COMPLETE, loadedCompleteHandler);
+			var xmldata:XML = XML(e.target.data);
+			parseXML(xmldata);
 		}
 		
 	}
